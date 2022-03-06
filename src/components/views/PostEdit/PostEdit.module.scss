@@ -1,0 +1,11 @@
+@import '../../../styles/settings.scss';
+
+.root {
+  display: flex;
+  height: calc(100vh - 70px);
+
+  .paper {
+    padding: $main-padding;
+    margin: auto;
+  }
+}

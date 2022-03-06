@@ -1,0 +1,30 @@
+@import '../../../styles/settings.scss';
+
+.header {
+  margin-bottom: 24px;
+}
+
+.select {
+  min-width: 150px;
+}
+
+.uploadWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .uploadInput {
+    display: none;
+  }
+
+  .uploadedFileInfo {
+    margin: 0 auto;
+    padding-left: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.submitWrapper {
+  text-align: center;
+}
