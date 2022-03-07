@@ -15,18 +15,22 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ForwardOutlinedIcon from '@material-ui/icons/ForwardOutlined';
 
-import { getAll, getLoading, fetchAll } from '../../../redux/postsRedux.js';
+import { getAll, getLoading, fetchAll, fetchMyPosts } from '../../../redux/postsRedux.js';
 import { isLogged } from '../../../redux/userRedux.js';
 
 import styles from './Homepage.module.scss';
 
 import { Loading } from '../../features/Loading/Loading.js';
 
-const Component = ({ className, allPosts, loadingStatus, isUserLogged, loadPosts }) => {
+const Component = ({ className, allPosts, loadingStatus, isUserLogged, loadAllPosts, loadMyPosts, location: {state} }) => {
 
   useEffect(() => {
-    loadPosts();
-  }, [loadPosts]);
+    if(state && state.userId){
+      loadMyPosts(state.userId);
+    } else {
+      loadAllPosts();
+    }
+  }, [loadAllPosts, loadMyPosts, state ]);
 
   if(loadingStatus.active){
     return (
@@ -70,10 +74,10 @@ const Component = ({ className, allPosts, loadingStatus, isUserLogged, loadPosts
             b.releaseTime - a.releaseTime
           )).map(post => (
             <ListItem
-              key={post.id}
+              key={post._id}
               button={true}
               component={Link}
-              to={'/post/' + post.id}
+              to={'/post/' + post._id}
             >
               <ListItemIcon>
                 <ForwardOutlinedIcon
@@ -101,7 +105,8 @@ Component.propTypes = {
     PropTypes.bool,
     PropTypes.string,
   ]),
-  loadPosts: PropTypes.func,
+  loadAllPosts: PropTypes.func,
+  loadMyPosts: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -111,7 +116,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadPosts: () => dispatch(fetchAll()),
+  loadAllPosts: () => dispatch(fetchAll()),
+  loadMyPosts: userId => dispatch(fetchMyPosts(userId)),
 });
 
 const ComponentContainer = connect(mapStateToProps, mapDispatchToProps)(Component);

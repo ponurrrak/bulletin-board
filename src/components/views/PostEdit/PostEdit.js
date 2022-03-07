@@ -52,7 +52,7 @@ const Component = ({
   }, [postVersion, newPost.version]);
 
   useEffect(() => {
-    if(!postCopy && newPost.id){
+    if(!postCopy && newPost._id){
       updatePostCopy({
         ...newPost,
       });
@@ -107,13 +107,15 @@ const Component = ({
             updatePostCopy={updatePostCopy}
           />
           <PostBody
-            newPost={newPost}
-            savePostChange={savePostChange}
-            isFileValid={isFileValid}
-            isPostNotChanged={isPostNotChanged}
-            completePost={completePost}
+            {...{
+              newPost,
+              savePostChange,
+              isFileValid,
+              isPostNotChanged,
+              completePost,
+              setFormError,
+            }}
             sendToServer={putChangedPost}
-            setFormError={setFormError}
             headerText={'Edit post no ' + postIdFromUrl}
           />
         </Paper>

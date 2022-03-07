@@ -35,6 +35,23 @@ export const fetchAll = () => {
   };
 };
 
+export const fetchMyPosts = userId => {
+  return (dispatch, getState) => {
+    dispatch(fetchSuccess(testPosts.filter(post => (
+      userId === post.authorId
+    ))));
+    /*dispatch(fetchStarted());
+    Axios
+      .get(`${api.url}/api/${api.tables}`)
+      .then(res => {
+        dispatch(fetchSuccess(res.data));
+      })
+      .catch(err => {
+        dispatch(fetchError(err.message || true));
+      });*/
+  };
+};
+
 /* reducer */
 export const reducer = (statePart = {}, action = {}) => {
   switch (action.type) {

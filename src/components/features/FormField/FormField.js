@@ -11,13 +11,15 @@ const Component = ({ label, placeholder, value, handleChange, multiline = false 
     md={!multiline && 6}
   >
     <TextField
-      label={label}
+      {...{
+        label,
+        placeholder,
+        multiline,
+        value,
+      }}
       variant="outlined"
-      placeholder={placeholder}
       fullWidth
-      multiline={multiline}
       rows={Number(multiline && 8)}
-      value={value}
       onChange={handleChange}
     />
   </Grid>

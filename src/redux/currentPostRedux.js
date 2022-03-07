@@ -37,14 +37,19 @@ export const fetchCurrent = postId => {
   };
 };
 
+const createRequestBody = getState => {
+  const currentPost = getCurrent(getState());
+  const formData = new FormData();
+  for(const field in currentPost){
+    formData.append(field, currentPost[field]);
+  }
+  return formData;
+};
+
 export const postNew = () => {
   return (dispatch, getState) => {
-    const currentPost = getCurrent(getState());
-    const formData = new FormData();
-    for(const field in currentPost){
-      formData.append(field, currentPost[field]);
-    }
-    dispatch(fetchSuccess({id: testCurrentPost.id}));
+    const requestBody = createRequestBody(getState);
+    dispatch(fetchSuccess({_id: testCurrentPost._id}));
     /*dispatch(fetchStarted());
     Axios
       .post(`${api.url}/api/${api.tables}`, formData, {
@@ -63,11 +68,8 @@ export const postNew = () => {
 
 export const putChanged = () => {
   return (dispatch, getState) => {
+    const requestBody = createRequestBody(getState);
     const currentPost = getCurrent(getState());
-    const formData = new FormData();
-    for(const field in currentPost){
-      formData.append(field, currentPost[field]);
-    }
     dispatch(fetchSuccess({version: currentPost.version + 1 || 1}));
     /*dispatch(fetchStarted());
     Axios

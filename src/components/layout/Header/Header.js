@@ -64,7 +64,14 @@ const Component = ({ className, isLogged, isAdmin, switchUser }) => {
                     Sign in with
                     <FontAwesomeIcon className={styles.icon} icon={ faGoogle }/>
                   </Button>}
-                  {isLogged && <Button className={styles.link} component={Link} to='/'>My posts</Button>}
+                  {isLogged && <Button className={styles.link} component={Link} to={{
+                    pathname: '/',
+                    state: {
+                      userId: isLogged,
+                    },
+                  }}>
+                    My posts
+                  </Button>}
                   {isLogged && <Button className={styles.link} component='a' href='https://google.com'>
                     Sign out
                     <FontAwesomeIcon className={styles.icon} icon={ faGoogle }/>

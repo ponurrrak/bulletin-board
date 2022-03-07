@@ -68,16 +68,18 @@ const Component = ({
             clearErrorArray={setFormError}
           />
           <PostSuccessDialog
-            postId={newPost.id}
+            postId={newPost._id}
             clearForm={loadInitialState}
           />
           <PostBody
-            newPost={newPost}
-            savePostChange={savePostChange}
-            isFileValid={isFileValid}
-            completePost={completePost}
+            {...{
+              newPost,
+              savePostChange,
+              isFileValid,
+              completePost,
+              setFormError,
+            }}
             sendToServer={postNewPost}
-            setFormError={setFormError}
             headerText="Add new post"
           />
         </Paper>

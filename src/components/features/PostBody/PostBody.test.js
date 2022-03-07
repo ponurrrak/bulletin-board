@@ -1,5 +1,13 @@
-const data =
-  {
+import React from 'react';
+import { shallow } from 'enzyme';
+import { PostBodyComponent } from './PostBody';
+
+const mockProps = {
+  loadingStatus: {
+    active: false,
+    error: false,
+  },
+  newPost: {
     _id: '123',
     releaseTime: Date.now(),
     updateTime: Date.now(),
@@ -13,6 +21,12 @@ const data =
     phone: '771234567',
     photo: 'avatar.png',
     version: 0,
-  };
+  },
+};
 
-export default data;
+describe('Component PostBody', () => {
+  it('should render without crashing', () => {
+    const component = shallow(<PostBodyComponent {...mockProps} />);
+    expect(component).toBeTruthy();
+  });
+});
