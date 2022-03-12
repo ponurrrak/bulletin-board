@@ -22,22 +22,7 @@ export const fetchStarted = payload => ({ payload, type: FETCH_START });
 export const fetchSuccess = payload => ({ payload, type: FETCH_SUCCESS });
 export const fetchError = payload => ({ payload, type: FETCH_ERROR });
 
-/* thunk creators */
 export const fetchUser = () => {
-  return (dispatch, getState) => {
-    dispatch(fetchStarted());
-    Axios
-      .get(`${settings.api.url}/user/${settings.api.endpoints.auth.google}`)
-      .then(res => {
-        dispatch(fetchSuccess(res.data));
-      })
-      .catch(err => {
-        dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
-      });
-  };
-};
-
-/*export const fetchUser = () => {
   return (dispatch, getState) => {
     dispatch(fetchStarted());
     Promise.all(Object.keys(settings.api.endpoints.auth).map(authMode => (
@@ -54,7 +39,7 @@ export const fetchUser = () => {
       dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
     });
   };
-};*/
+};
 
 /* reducer */
 export const reducer = (statePart = {}, action = {}) => {
