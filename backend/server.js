@@ -14,7 +14,8 @@ const userRoutes = require('./routes/user.routes');
 const postsRoutes = require('./routes/posts.routes');
 
 const publicDirPath = path.join(__dirname, '../build');
-const uploadDirPath = process.env.NODE_ENV === 'production' ? path.join(publicDirPath, 'upload') : path.join(__dirname, '../public/upload');
+//const uploadDirPath = process.env.NODE_ENV === 'production' ? path.join(publicDirPath, 'upload') : path.join(__dirname, '../public/upload');
+const uploadDirPath = path.join(publicDirPath, 'upload');
 
 const app = express();
 
