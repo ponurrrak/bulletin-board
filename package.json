@@ -15,6 +15,9 @@
     "test-related": "react-scripts test --watchAll=false --noStackTrace --findRelatedTests",
     "eject": "react-scripts eject"
   },
+  "engines": {
+    "node": "v14.19.0"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
