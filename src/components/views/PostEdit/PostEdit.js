@@ -60,7 +60,7 @@ const Component = ({
   }, [newPost, postCopy]);
 
   const isFileValid = () => (
-    !newPost.photo || typeof newPost.photo === 'string' || newPost.photo.type.startsWith('image/')
+    !newPost.photoOriginal || typeof newPost.photoOriginal === 'string' || newPost.photoOriginal.type.startsWith('image/')
   );
 
   const isPostNotChanged = () => {
@@ -70,15 +70,6 @@ const Component = ({
       }
     }
     return true;
-  };
-
-  const completePost = () => {
-    const date = Date.now();
-    savePostChange({
-      updateTime: date,
-      authorId: isLogged,
-      price: newPost.price === '' ? '' : Number(newPost.price),
-    });
   };
 
   if(!(isAdmin || (newPost.authorId === isLogged))){
@@ -112,10 +103,9 @@ const Component = ({
               savePostChange,
               isFileValid,
               isPostNotChanged,
-              completePost,
               setFormError,
             }}
-            sendToServer={putChangedPost}
+            sendToServer={() => putChangedPost(postIdFromUrl)}
             headerText={'Edit post no ' + postIdFromUrl}
           />
         </Paper>
@@ -149,7 +139,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   savePostChange: changes => dispatch(fetchSuccess(changes)),
   loadPostWithId: postId => dispatch(fetchCurrent(postId)),
-  putChangedPost: () => dispatch(putChanged()),
+  putChangedPost: postId => dispatch(putChanged(postId)),
 });
 
 const ComponentContainer = connect(mapStateToProps, mapDispatchToProps)(Component);

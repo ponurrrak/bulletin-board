@@ -1,5 +1,5 @@
-//import Axios from 'axios';
-import testPosts from './testData/posts.js';
+import Axios from 'axios';
+import settings from '../settings';
 
 /* selectors */
 export const getAll = ({posts}) => posts.data;
@@ -22,33 +22,29 @@ export const fetchError = payload => ({ payload, type: FETCH_ERROR });
 /* thunk creators */
 export const fetchAll = () => {
   return (dispatch, getState) => {
-    dispatch(fetchSuccess(testPosts));
-    /*dispatch(fetchStarted());
+    dispatch(fetchStarted());
     Axios
-      .get(`${api.url}/api/${api.tables}`)
+      .get(`${settings.api.url}/${settings.api.endpoints.posts}`)
       .then(res => {
         dispatch(fetchSuccess(res.data));
       })
       .catch(err => {
-        dispatch(fetchError(err.message || true));
-      });*/
+        dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
+      });
   };
 };
 
 export const fetchMyPosts = userId => {
   return (dispatch, getState) => {
-    dispatch(fetchSuccess(testPosts.filter(post => (
-      userId === post.authorId
-    ))));
-    /*dispatch(fetchStarted());
+    dispatch(fetchStarted());
     Axios
-      .get(`${api.url}/api/${api.tables}`)
+      .get(`${settings.api.url}/${settings.api.endpoints.userPosts}/${userId}`)
       .then(res => {
         dispatch(fetchSuccess(res.data));
       })
       .catch(err => {
-        dispatch(fetchError(err.message || true));
-      });*/
+        dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
+      });
   };
 };
 

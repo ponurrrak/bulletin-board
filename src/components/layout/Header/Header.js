@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -10,42 +10,20 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
-import { isLogged, isAdmin, fetchSuccess } from '../../../redux/userRedux.js';
+import { isLogged, isAdmin, fetchUser, getName, getPhoto } from '../../../redux/userRedux.js';
 
 import styles from './Header.module.scss';
 
-const Component = ({ className, isLogged, isAdmin, switchUser }) => {
-  const handleChange = e => {
-    switch (e.target.value) {
-      case 'admin': {
-        switchUser({
-          logged: true,
-          admin: true,
-        });
-        break;
-      }
-      case 'logged': {
-        switchUser({
-          logged: '123456789',
-          admin: false,
-        });
-        break;
-      }
-      default:
-        switchUser({
-          logged: false,
-          admin: false,
-        });
-    }
-  };
+const Component = ({ className, isLogged, isAdmin, fetchUser, userDisplayName, userPhoto }) => {
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+
   return (
     <div className={clsx(className, styles.root)}>
       <AppBar>
@@ -60,7 +38,7 @@ const Component = ({ className, isLogged, isAdmin, switchUser }) => {
               >
                 <Grid item>
                   <Button className={styles.link} component={Link} to='/'>Home</Button>
-                  {!isLogged && <Button className={styles.link} component='a' href='https://google.com'>
+                  {!isLogged && <Button className={styles.link} component='a' href='/auth/google'>
                     Sign in with
                     <FontAwesomeIcon className={styles.icon} icon={ faGoogle }/>
                   </Button>}
@@ -72,23 +50,20 @@ const Component = ({ className, isLogged, isAdmin, switchUser }) => {
                   }}>
                     My posts
                   </Button>}
-                  {isLogged && <Button className={styles.link} component='a' href='https://google.com'>
+                  {isLogged && <Button className={styles.link} component='a' href='/auth/logout'>
                     Sign out
                     <FontAwesomeIcon className={styles.icon} icon={ faGoogle }/>
                   </Button>}
                 </Grid>
-                <Grid item>
-                  <FormControl className={styles.select}>
-                    <InputLabel focused={false}>Switch user</InputLabel>
-                    <Select
-                      value={isLogged ? (isAdmin ? 'admin' : 'logged') : 'not logged'}
-                      onChange={handleChange}
-                    >
-                      <MenuItem value='not logged'>Not logged</MenuItem>
-                      <MenuItem value='logged'>Logged</MenuItem>
-                      <MenuItem value='admin'>Admin</MenuItem>
-                    </Select>
-                  </FormControl>
+                <Grid item className={styles.user}>
+                  <div className={styles.userInfo}>
+                    <p>
+                      {'You are ' + (isLogged ? ('logged as ' + (isAdmin ? 'Admin' : userDisplayName)) : 'not logged')}
+                    </p>
+                  </div>
+                  {userPhoto && <div className={styles.userPhoto}>
+                    <img src={userPhoto} alt="" />
+                  </div>}
                 </Grid>
               </Grid>
             </nav>
@@ -106,16 +81,20 @@ Component.propTypes = {
     PropTypes.string,
   ]),
   isAdmin: PropTypes.bool,
-  switchUser: PropTypes.func,
+  fetchUser: PropTypes.func,
+  userDisplayName: PropTypes.string,
+  userPhoto: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
   isLogged: isLogged(state),
   isAdmin: isAdmin(state),
+  userDisplayName: getName(state),
+  userPhoto: getPhoto(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  switchUser: user => dispatch(fetchSuccess(user)),
+  fetchUser: () => dispatch(fetchUser()),
 });
 
 const ComponentContainer = connect(mapStateToProps, mapDispatchToProps)(Component);

@@ -10,17 +10,19 @@ import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
+import DOMPurify from 'dompurify';
+
 import styles from './PostBody.module.scss';
 
 import { FormField } from '../FormField/FormField';
 import settings from '../../../settings.js';
+import { createSpanMarkup } from '../../common/createMarkup';
 
 const Component = ({
   newPost,
   savePostChange,
   isFileValid,
   isPostNotChanged,
-  completePost,
   sendToServer,
   setFormError,
   headerText,
@@ -40,16 +42,20 @@ const Component = ({
     }
   };
 
+  const handleStopEditPrice = e => (
+    savePostChange({price: e.target.value === '' ? '' : Number(e.target.value)})
+  );
+
   const handleUploadFile = e => {
-    if(!newPost.photo || !newPost.photo.name){
-      savePostChange({photo: e.target.files[0]});
+    if(!newPost.photoOriginal || !newPost.photoOriginal.name){
+      savePostChange({photoOriginal: e.target.files[0]});
     }
   };
 
   const handleRemoveFile = e => {
-    if(newPost.photo){
+    if(newPost.photoOriginal){
       e.preventDefault();
-      savePostChange({photo: ''});
+      savePostChange({photoOriginal: ''});
     }
   };
 
@@ -74,12 +80,18 @@ const Component = ({
     return errors;
   };
 
+  const sanitizePost = () => {
+    for(const field in settings.patterns){
+      savePostChange({[field]: DOMPurify.sanitize(newPost[field])});
+    }
+  };
+
   const handleSubmit = () => {
     const errors = validateForm();
     if(errors.length){
       setFormError(errors);
     } else {
-      completePost();
+      sanitizePost();
       sendToServer();
     }
   };
@@ -135,6 +147,7 @@ const Component = ({
           placeholder='0.00 or empty'
           value={newPost.price}
           handleChange={handlePriceChange}
+          handleBlur={handleStopEditPrice}
         />
         <FormField
           label="Location"
@@ -169,12 +182,15 @@ const Component = ({
               startIcon={<PhotoCamera/>}
               size="large"
             >
-              {(newPost.photo && 'Remove') || 'Upload'}
+              {(newPost.photoOriginal && 'Remove') || 'Upload'}
             </Button>
           </label>
           <Typography className={styles.uploadedFileInfo}>
-            {newPost.photo ?
-              'You\'ve selected ' + (newPost.photo.name || newPost.photo)
+            {newPost.photoOriginal ?
+              <span>
+                You&apos;ve selected&nbsp;
+                {createSpanMarkup(newPost.photoOriginal.name || newPost.photoOriginal)}
+              </span>
               :
               <span>
                 No file selected
@@ -211,7 +227,6 @@ Component.propTypes = {
   savePostChange: PropTypes.func,
   isFileValid: PropTypes.func,
   isPostNotChanged: PropTypes.func,
-  completePost: PropTypes.func,
   sendToServer: PropTypes.func,
   setFormError: PropTypes.func,
   headerText: PropTypes.string,

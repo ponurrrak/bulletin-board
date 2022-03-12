@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import clsx from 'clsx';
+import { createSpanMarkup } from '../../common/createMarkup.js';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -54,7 +55,7 @@ const Component = ({ className, allPosts, loadingStatus, isUserLogged, loadAllPo
               Your Bulletin Board
             </Typography>
             <Typography gutterBottom variant='h5'>
-              Latest classifieds:
+              {(state && state.userId ? 'Your own l' : 'L') + 'atest classifieds:'}
             </Typography>
           </Grid>
           {isUserLogged && <Grid item>
@@ -86,8 +87,8 @@ const Component = ({ className, allPosts, loadingStatus, isUserLogged, loadAllPo
                 />
               </ListItemIcon>
               <ListItemText
-                primary={post.title}
-                secondary={post.content}
+                primary={createSpanMarkup(post.title)}
+                secondary={createSpanMarkup(post.content)}
               />
             </ListItem>
           ))}

@@ -1,5 +1,5 @@
-//import Axios from 'axios';
-import testCurrentPost from './testData/currentPost.js';
+import Axios from 'axios';
+import settings from '../settings';
 
 /* selectors */
 export const getCurrent = ({currentPost}) => currentPost.data;
@@ -19,21 +19,20 @@ const CLEAR_DATA = createActionName('CLEAR_DATA');
 export const fetchStarted = payload => ({ payload, type: FETCH_START });
 export const fetchSuccess = payload => ({ payload, type: FETCH_SUCCESS });
 export const fetchError = payload => ({ payload, type: FETCH_ERROR });
-export const clearData = () => ({ type: CLEAR_DATA });
+export const clearData = payload => ({ payload, type: CLEAR_DATA });
 
 /* thunk creators */
 export const fetchCurrent = postId => {
   return (dispatch, getState) => {
-    dispatch(fetchSuccess(testCurrentPost));
-    /*dispatch(fetchStarted());
+    dispatch(fetchStarted());
     Axios
-      .get(`${api.url}/api/${api.tables}`)
+      .get(`${settings.api.url}/${settings.api.endpoints.posts}/${postId}`)
       .then(res => {
         dispatch(fetchSuccess(res.data));
       })
       .catch(err => {
-        dispatch(fetchError(err.message || true));
-      });*/
+        dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
+      });
   };
 };
 
@@ -49,41 +48,38 @@ const createRequestBody = getState => {
 export const postNew = () => {
   return (dispatch, getState) => {
     const requestBody = createRequestBody(getState);
-    dispatch(fetchSuccess({_id: testCurrentPost._id}));
-    /*dispatch(fetchStarted());
+    dispatch(fetchStarted());
     Axios
-      .post(`${api.url}/api/${api.tables}`, formData, {
+      .post(`${settings.api.url}/${settings.api.endpoints.posts}`, requestBody, {
         headers: {
-          'content-type': 'multipart/form-data'
-        }
+          'content-type': 'multipart/form-data',
+        },
       })
       .then(res => {
         dispatch(fetchSuccess(res.data));
       })
       .catch(err => {
-        dispatch(fetchError(err.message || true));
-      });*/
+        dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
+      });
   };
 };
 
-export const putChanged = () => {
+export const putChanged = postId => {
   return (dispatch, getState) => {
     const requestBody = createRequestBody(getState);
-    const currentPost = getCurrent(getState());
-    dispatch(fetchSuccess({version: currentPost.version + 1 || 1}));
-    /*dispatch(fetchStarted());
+    dispatch(fetchStarted());
     Axios
-      .put(`${api.url}/api/${api.tables}`, formData, {
+      .put(`${settings.api.url}/${settings.api.endpoints.posts}/${postId}`, requestBody, {
         headers: {
-          'content-type': 'multipart/form-data'
-        }
+          'content-type': 'multipart/form-data',
+        },
       })
       .then(res => {
         dispatch(fetchSuccess(res.data));
       })
       .catch(err => {
-        dispatch(fetchError(err.message || true));
-      });*/
+        dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
+      });
   };
 };
 
@@ -126,8 +122,7 @@ export const reducer = (statePart = {}, action = {}) => {
         'content',
         'price',
         'phone',
-        'photo',
-        'email',
+        'photoOriginal',
         'location',
       ];
       const emptyData = {};
@@ -142,6 +137,7 @@ export const reducer = (statePart = {}, action = {}) => {
         data: {
           ...emptyData,
           status: 'draft',
+          email: (action.payload && action.payload.email) || '',
         },
       };
     }

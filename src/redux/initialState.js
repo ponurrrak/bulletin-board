@@ -7,10 +7,7 @@ export const initialState = {
     },
   },
   user: {
-    data: {
-      logged: false,
-      admin: false,
-    },
+    data: {},
     loading: {
       active: false,
       error: false,

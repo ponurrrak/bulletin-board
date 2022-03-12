@@ -1,6 +1,12 @@
+import Axios from 'axios';
+import settings from '../settings';
+
 /* selectors */
-export const isLogged = ({user}) => user.data.logged;
+export const isLogged = ({user}) => user.data.userId;
 export const isAdmin = ({user}) => user.data.admin;
+export const getName = ({user}) => user.data.displayName;
+export const getEmail = ({user}) => user.data.email;
+export const getPhoto = ({user}) => user.data.photo;
 
 /* action name creator */
 const reducerName = 'user';
@@ -17,6 +23,38 @@ export const fetchSuccess = payload => ({ payload, type: FETCH_SUCCESS });
 export const fetchError = payload => ({ payload, type: FETCH_ERROR });
 
 /* thunk creators */
+export const fetchUser = () => {
+  return (dispatch, getState) => {
+    dispatch(fetchStarted());
+    Axios
+      .get(`${settings.api.url}/user/${settings.api.endpoints.auth.google}`)
+      .then(res => {
+        dispatch(fetchSuccess(res.data));
+      })
+      .catch(err => {
+        dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
+      });
+  };
+};
+
+/*export const fetchUser = () => {
+  return (dispatch, getState) => {
+    dispatch(fetchStarted());
+    Promise.all(Object.keys(settings.api.endpoints.auth).map(authMode => (
+      Axios.get(`${settings.api.url}/user/${settings.api.endpoints.auth[authMode]}`)
+    ))).then(resArray => {
+      resArray.forEach(res => {
+        if(res.data && res.data.userId) {
+          dispatch(fetchSuccess(res.data));
+          return;
+        }
+        dispatch(fetchSuccess({}));
+      });
+    }).catch(err => {
+      dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
+    });
+  };
+};*/
 
 /* reducer */
 export const reducer = (statePart = {}, action = {}) => {

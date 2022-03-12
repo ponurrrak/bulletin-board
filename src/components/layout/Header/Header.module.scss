@@ -15,20 +15,29 @@
   color:inherit;
 }
 
-.select {
-  min-width: 130px;
-  text-transform: uppercase;
+.user {
+  display: flex;
 
-  * {
-    color: inherit;
+  .userInfo {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.02857em;
+    margin-right: 15px;
+  }
+  .userPhoto {
+    height: 46px;
+    width: 46px;
 
-    &:not(label) {
-      font-weight: 500;
-    }
-
-    &:not(svg) {
-      font-size: 0.875rem;
-      letter-spacing: 0.02857em;
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 50%;
     }
   }
 }
+
+
+
+

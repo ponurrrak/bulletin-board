@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
 
 import { getCurrent, getLoading, fetchSuccess, clearData, postNew } from '../../../redux/currentPostRedux.js';
-import { isLogged } from '../../../redux/userRedux.js';
+import { isLogged, getEmail } from '../../../redux/userRedux.js';
 
 import styles from './PostAdd.module.scss';
 
@@ -22,6 +22,7 @@ const Component = ({
   loadInitialState,
   newPost,
   isLogged,
+  userEmail,
   loadingStatus,
   savePostChange,
   postNewPost,
@@ -30,22 +31,16 @@ const Component = ({
   const [isFormError, setFormError] = useState([]);
 
   useEffect(() => {
-    loadInitialState();
-  }, [loadInitialState]);
+    if(userEmail) {
+      loadInitialState({email: userEmail});
+    } else {
+      loadInitialState();
+    }
+  }, [loadInitialState, userEmail]);
 
   const isFileValid = () => (
-    !newPost.photo || newPost.photo.type.startsWith('image/')
+    !newPost.photoOriginal || newPost.photoOriginal.type.startsWith('image/')
   );
-
-  const completePost = () => {
-    const date = Date.now();
-    savePostChange({
-      updateTime: date,
-      releaseTime: date,
-      authorId: isLogged,
-      price: newPost.price === '' ? '' : Number(newPost.price),
-    });
-  };
 
   if(!isLogged){
     return (
@@ -76,7 +71,6 @@ const Component = ({
               newPost,
               savePostChange,
               isFileValid,
-              completePost,
               setFormError,
             }}
             sendToServer={postNewPost}
@@ -99,16 +93,18 @@ Component.propTypes = {
     PropTypes.bool,
     PropTypes.string,
   ]),
+  userEmail: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
   newPost: getCurrent(state),
   loadingStatus: getLoading(state),
   isLogged: isLogged(state),
+  userEmail: getEmail(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadInitialState: () => dispatch(clearData()),
+  loadInitialState: (defaults={}) => dispatch(clearData(defaults)),
   savePostChange: changes => dispatch(fetchSuccess(changes)),
   postNewPost: () => dispatch(postNew()),
 });

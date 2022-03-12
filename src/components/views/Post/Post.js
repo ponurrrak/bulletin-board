@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import clsx from 'clsx';
+import DOMPurify from 'dompurify';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -20,6 +21,7 @@ import { isLogged, isAdmin } from '../../../redux/userRedux.js';
 import styles from './Post.module.scss';
 
 import { Loading } from '../../features/Loading/Loading.js';
+import { createTextMarkup } from '../../common/createMarkup.js';
 
 const Component = ({className, currentPost, loadingStatus, loadPost, userId, isAdmin, match: {params: {id}}}) => {
 
@@ -49,9 +51,11 @@ const Component = ({className, currentPost, loadingStatus, loadPost, userId, isA
               <Typography gutterBottom variant='h4'>
                 {'Post no ' + id + ' details:'}
               </Typography>
-              <Typography gutterBottom variant='h5'>
-                {currentPost.title}
-              </Typography>
+              <Typography
+                gutterBottom
+                variant='h5'
+                dangerouslySetInnerHTML={createTextMarkup(currentPost.title)}
+              />
             </Grid>
             {(userId === currentPost.authorId || isAdmin) && <Grid item>
               <Button
@@ -117,8 +121,10 @@ const Component = ({className, currentPost, loadingStatus, loadPost, userId, isA
                     <TableCell align="right">
                       Email contact:
                     </TableCell>
-                    <TableCell align="left">
-                      {currentPost.email}
+                    <TableCell
+                      align="left"
+                      dangerouslySetInnerHTML={createTextMarkup(currentPost.email)}
+                    >
                     </TableCell>
                   </TableRow>
                   {currentPost.phone ?
@@ -138,8 +144,10 @@ const Component = ({className, currentPost, loadingStatus, loadPost, userId, isA
                       <TableCell align="right">
                         Location:
                       </TableCell>
-                      <TableCell align="left">
-                        {currentPost.location}
+                      <TableCell
+                        align="left"
+                        dangerouslySetInnerHTML={createTextMarkup(currentPost.location)}
+                      >
                       </TableCell>
                     </TableRow>
                     :
@@ -149,10 +157,10 @@ const Component = ({className, currentPost, loadingStatus, loadPost, userId, isA
               </Table>
             </Grid>
             <Grid item xs={12} md={6}>
-              {currentPost.photo ?
+              {currentPost.photoUploaded ?
                 <img
-                  src={'/' + currentPost.photo}
-                  alt={currentPost.photo}
+                  src={'/upload/' + DOMPurify.sanitize(currentPost.photoUploaded)}
+                  alt="Post attachment"
                   className={styles.image}
                 />
                 :
@@ -160,23 +168,23 @@ const Component = ({className, currentPost, loadingStatus, loadPost, userId, isA
                   <Typography gutterBottom variant='h6'>
                     Post content:
                   </Typography>
-                  <p>
-                    {currentPost.content}
-                  </p>
+                  <p
+                    dangerouslySetInnerHTML={createTextMarkup(currentPost.content)}
+                  />
                 </div>
               }
             </Grid>
           </Grid>
         </Paper>
-        {currentPost.photo && <Paper
+        {currentPost.photoUploaded && <Paper
           className={styles.paper}
         >
           <Typography gutterBottom variant='h6'>
             Post content:
           </Typography>
-          <p>
-            {currentPost.content}
-          </p>
+          <p
+            dangerouslySetInnerHTML={createTextMarkup(currentPost.content)}
+          />
         </Paper>}
       </div>
 

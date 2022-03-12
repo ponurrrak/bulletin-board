@@ -3,4 +3,8 @@
 .root {
   margin-top: $root-margin-top;
   padding: $main-padding;
+
+  .pre {
+    white-space: normal;
+  }
 }
