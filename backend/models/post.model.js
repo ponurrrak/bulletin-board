@@ -85,8 +85,7 @@ const postSchema = new mongoose.Schema({
   },
   authBy: {
     type: String,
-    enum: ['google'],
-    default: 'google',
+    enum: ['google', 'facebook'],
   },
 });
 

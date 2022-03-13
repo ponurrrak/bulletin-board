@@ -8,11 +8,14 @@
     margin-bottom: $paper-margin-bottom;
   }
 
-  .image {
+  .imageWrapper {
     height: 100%;
-    max-width: 100%;
-    object-fit: cover;
-    margin: 0 auto;
-    display: block;
+    max-height: 420px;
+
+    .image {
+      height: 100%;
+      width: 100%;
+      object-fit: scale-down;
+    }
   }
 }

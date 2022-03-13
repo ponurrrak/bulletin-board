@@ -1,4 +1,5 @@
 const mime = require('mime');
+const formidable = require('formidable');
 
 exports.savePhoto = (doc, req) => {
   const photo = req.file.photoOriginal;
@@ -41,3 +42,23 @@ exports.parseErrors = err => {
   }
   return message;
 };
+
+exports.useFormidable = uploadDirPath => (
+  (req, res, next) => {
+    const contentType = req.headers['content-type'] || '';
+    if(['POST', 'PUT'].includes(req.method) && contentType.startsWith('multipart/form-data')){
+      const form = formidable({
+        multiples: false,
+        uploadDir: uploadDirPath,
+        keepExtensions: true,
+      });
+      form.parse(req, (err, fields, file) => {
+        req.body = fields;
+        req.file = file;
+        next();
+      });
+    } else {
+      next();
+    }
+  }
+);

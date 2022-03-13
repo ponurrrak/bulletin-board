@@ -22,6 +22,7 @@ const settings = {
       userPosts: 'posts/author',
       auth: {
         google: 'google',
+        facebook: 'facebook',
       },
     },
   },

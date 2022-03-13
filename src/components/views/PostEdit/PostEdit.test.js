@@ -27,6 +27,7 @@ const mockProps = {
     photo: 'avatar.png',
     version: 0,
   },
+  user: {},
 };
 
 describe('Component PostEdit', () => {

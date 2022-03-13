@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
 
 import { getCurrent, getLoading, fetchSuccess, clearData, postNew } from '../../../redux/currentPostRedux.js';
-import { isLogged, getEmail } from '../../../redux/userRedux.js';
+import { getUser } from '../../../redux/userRedux.js';
 
 import styles from './PostAdd.module.scss';
 
@@ -21,8 +21,7 @@ const Component = ({
   className,
   loadInitialState,
   newPost,
-  isLogged,
-  userEmail,
+  user,
   loadingStatus,
   savePostChange,
   postNewPost,
@@ -31,18 +30,18 @@ const Component = ({
   const [isFormError, setFormError] = useState([]);
 
   useEffect(() => {
-    if(userEmail) {
-      loadInitialState({email: userEmail});
+    if(user.email) {
+      loadInitialState({email: user.email});
     } else {
       loadInitialState();
     }
-  }, [loadInitialState, userEmail]);
+  }, [loadInitialState, user.email]);
 
   const isFileValid = () => (
     !newPost.photoOriginal || newPost.photoOriginal.type.startsWith('image/')
   );
 
-  if(!isLogged){
+  if(!user.userId){
     return (
       <NotFound/>
     );
@@ -85,22 +84,17 @@ const Component = ({
 Component.propTypes = {
   className: PropTypes.string,
   newPost: PropTypes.object,
+  user: PropTypes.object,
   loadingStatus: PropTypes.object,
   loadInitialState: PropTypes.func,
   savePostChange: PropTypes.func,
   postNewPost: PropTypes.func,
-  isLogged: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.string,
-  ]),
-  userEmail: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
   newPost: getCurrent(state),
   loadingStatus: getLoading(state),
-  isLogged: isLogged(state),
-  userEmail: getEmail(state),
+  user: getUser(state),
 });
 
 const mapDispatchToProps = dispatch => ({

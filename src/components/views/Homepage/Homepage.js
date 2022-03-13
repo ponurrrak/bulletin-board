@@ -17,13 +17,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ForwardOutlinedIcon from '@material-ui/icons/ForwardOutlined';
 
 import { getAll, getLoading, fetchAll, fetchMyPosts } from '../../../redux/postsRedux.js';
-import { isLogged } from '../../../redux/userRedux.js';
+import { getUser } from '../../../redux/userRedux.js';
 
 import styles from './Homepage.module.scss';
 
 import { Loading } from '../../features/Loading/Loading.js';
 
-const Component = ({ className, allPosts, loadingStatus, isUserLogged, loadAllPosts, loadMyPosts, location: {state} }) => {
+const Component = ({ className, allPosts, loadingStatus, user, loadAllPosts, loadMyPosts, location: {state} }) => {
 
   useEffect(() => {
     if(state && state.userId){
@@ -58,7 +58,7 @@ const Component = ({ className, allPosts, loadingStatus, isUserLogged, loadAllPo
               {(state && state.userId ? 'Your own l' : 'L') + 'atest classifieds:'}
             </Typography>
           </Grid>
-          {isUserLogged && <Grid item>
+          {user.userId && <Grid item>
             <Button
               component={Link}
               to='/post/add'
@@ -102,10 +102,7 @@ Component.propTypes = {
   className: PropTypes.string,
   allPosts: PropTypes.array,
   loadingStatus: PropTypes.object,
-  isUserLogged: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.string,
-  ]),
+  user: PropTypes.object,
   loadAllPosts: PropTypes.func,
   loadMyPosts: PropTypes.func,
 };
@@ -113,7 +110,7 @@ Component.propTypes = {
 const mapStateToProps = state => ({
   allPosts: getAll(state),
   loadingStatus: getLoading(state),
-  isUserLogged: isLogged(state),
+  user: getUser(state),
 });
 
 const mapDispatchToProps = dispatch => ({

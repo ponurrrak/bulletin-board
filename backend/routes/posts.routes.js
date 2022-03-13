@@ -5,8 +5,7 @@ const querySanitize = require('mongo-sanitize');
 const Post = require('../models/post.model');
 const User = require('../models/user.model');
 const { savePhoto, completeDocument, parseErrors } = require('../utils/utils');
-
-const noUpdateFields = ['_id', 'version', 'authorId', 'authBy', 'releaseTime', 'photoOriginal', 'photoUploaded', '__v'];
+const noUpdateFields = require('../config/config').noUpdateFields;
 
 router.get('/', async (req, res) => {
   try {

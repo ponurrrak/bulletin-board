@@ -35,6 +35,7 @@ const mockProps = {
       userId: false,
     },
   },
+  user: {},
 };
 
 describe('Component Homepage', () => {

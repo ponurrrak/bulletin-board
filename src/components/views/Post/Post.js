@@ -16,14 +16,14 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
 import { getCurrent, getLoading, fetchCurrent } from '../../../redux/currentPostRedux.js';
-import { isLogged, isAdmin } from '../../../redux/userRedux.js';
+import { getUser } from '../../../redux/userRedux.js';
 
 import styles from './Post.module.scss';
 
 import { Loading } from '../../features/Loading/Loading.js';
 import { createTextMarkup } from '../../common/createMarkup.js';
 
-const Component = ({className, currentPost, loadingStatus, loadPost, userId, isAdmin, match: {params: {id}}}) => {
+const Component = ({className, currentPost, loadingStatus, loadPost, user, match: {params: {id}}}) => {
 
   useEffect(() => {
     loadPost(id);
@@ -57,7 +57,7 @@ const Component = ({className, currentPost, loadingStatus, loadPost, userId, isA
                 dangerouslySetInnerHTML={createTextMarkup(currentPost.title)}
               />
             </Grid>
-            {(userId === currentPost.authorId || isAdmin) && <Grid item>
+            {(user.userId === currentPost.authorId || user.admin) && <Grid item>
               <Button
                 component={Link}
                 to={'/post/' + id + '/edit'}
@@ -158,11 +158,13 @@ const Component = ({className, currentPost, loadingStatus, loadPost, userId, isA
             </Grid>
             <Grid item xs={12} md={6}>
               {currentPost.photoUploaded ?
-                <img
-                  src={'/upload/' + DOMPurify.sanitize(currentPost.photoUploaded)}
-                  alt="Post attachment"
-                  className={styles.image}
-                />
+                <div className={styles.imageWrapper}>
+                  <img
+                    src={'/upload/' + DOMPurify.sanitize(currentPost.photoUploaded)}
+                    alt=""
+                    className={styles.image}
+                  />
+                </div>
                 :
                 <div>
                   <Typography gutterBottom variant='h6'>
@@ -195,21 +197,16 @@ const Component = ({className, currentPost, loadingStatus, loadPost, userId, isA
 Component.propTypes = {
   className: PropTypes.string,
   currentPost: PropTypes.object,
+  user: PropTypes.object,
   loadingStatus: PropTypes.object,
   loadPost: PropTypes.func,
-  userId: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.string,
-  ]),
-  isAdmin: PropTypes.bool,
   match: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
   currentPost: getCurrent(state),
   loadingStatus: getLoading(state),
-  userId: isLogged(state),
-  isAdmin: isAdmin(state),
+  user: getUser(state),
 });
 
 const mapDispatchToProps = dispatch => ({

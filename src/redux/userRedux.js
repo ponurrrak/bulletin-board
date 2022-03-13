@@ -2,6 +2,7 @@ import Axios from 'axios';
 import settings from '../settings';
 
 /* selectors */
+export const getUser = ({user}) => user.data;
 export const isLogged = ({user}) => user.data.userId;
 export const isAdmin = ({user}) => user.data.admin;
 export const getName = ({user}) => user.data.displayName;
@@ -28,13 +29,14 @@ export const fetchUser = () => {
     Promise.all(Object.keys(settings.api.endpoints.auth).map(authMode => (
       Axios.get(`${settings.api.url}/user/${settings.api.endpoints.auth[authMode]}`)
     ))).then(resArray => {
+      let success;
       resArray.forEach(res => {
         if(res.data && res.data.userId) {
           dispatch(fetchSuccess(res.data));
-          return;
+          success = true;
         }
-        dispatch(fetchSuccess({}));
       });
+      !success && dispatch(fetchSuccess({}));
     }).catch(err => {
       dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
     });

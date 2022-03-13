@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
 
 import { getCurrent, getLoading, fetchSuccess, fetchCurrent, putChanged } from '../../../redux/currentPostRedux.js';
-import { isAdmin, isLogged } from '../../../redux/userRedux.js';
+import { getUser } from '../../../redux/userRedux.js';
 
 import styles from './PostEdit.module.scss';
 
@@ -21,10 +21,9 @@ const Component = ({
   className,
   loadPostWithId,
   newPost,
-  isLogged,
+  user,
   loadingStatus,
   savePostChange,
-  isAdmin,
   putChangedPost,
   match,
 }) => {
@@ -72,7 +71,7 @@ const Component = ({
     return true;
   };
 
-  if(!(isAdmin || (newPost.authorId === isLogged))){
+  if(!(user.admin || (newPost.authorId === user.userId))){
     return (
       <NotFound/>
     );
@@ -117,23 +116,18 @@ const Component = ({
 Component.propTypes = {
   className: PropTypes.string,
   newPost: PropTypes.object,
+  user: PropTypes.object,
   loadingStatus: PropTypes.object,
   loadPostWithId: PropTypes.func,
   savePostChange: PropTypes.func,
   putChangedPost: PropTypes.func,
-  isAdmin: PropTypes.bool,
-  isLogged: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.string,
-  ]),
   match: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
   newPost: getCurrent(state),
   loadingStatus: getLoading(state),
-  isLogged: isLogged(state),
-  isAdmin: isAdmin(state),
+  user: getUser(state),
 });
 
 const mapDispatchToProps = dispatch => ({
