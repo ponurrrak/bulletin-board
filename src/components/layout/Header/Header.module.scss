@@ -13,7 +13,7 @@
 
 .iconLink {
   color:inherit;
-  padding-right: 40px;
+  padding-right: 70px;
   position: relative;
 }
 
@@ -21,17 +21,13 @@
   color: inherit;
   padding: 0;
   position: absolute;
-  right: 10px;
-  width: 24px;
+  right: 18px;
+  font-size: 44px;
 }
 
 .iconFacebook {
-  font-size: 1.7rem;
-  right: 6px;
-}
-
-.iconGoogle {
-  color: #DC004E;
+  //font-size: 48px;
+  right: 32px;
 }
 
 .user {
@@ -57,7 +53,7 @@
   }
 }
 
-@media (max-width: 575px) {
+@media (max-width: 767px) {
   .user {
     display: none;
   }

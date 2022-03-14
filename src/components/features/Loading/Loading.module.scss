@@ -1,10 +1,19 @@
 @import '../../../styles/settings.scss';
 
 .root {
-  margin-top: $root-margin-top;
-  padding: $main-padding;
+  position:relative;
+  height: calc(100vh - 70px);
 
-  .pre {
-    white-space: normal;
+  .wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    //padding: 50px 80px;
+
+    .pre {
+      white-space: normal;
+    }
   }
 }

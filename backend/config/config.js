@@ -5,7 +5,7 @@ module.exports = {
   helmetOptions: {
     contentSecurityPolicy: {
       directives: {
-        'img-src': ['\'self\'', '*.googleusercontent.com:*', '*.fbcdn.net:*'],
+        'img-src': ['*'],
       },
     },
     crossOriginEmbedderPolicy: false,

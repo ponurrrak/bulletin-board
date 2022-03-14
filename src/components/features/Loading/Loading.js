@@ -17,17 +17,28 @@ const Component = ({className, errorMessage = false}) => {
   } else {
     return (
       <Paper className={clsx(className, styles.root)}>
-        <Typography gutterBottom variant='h4'>
-          {errorMessage ?
-            <span>
-              Error! Details:
-              <pre className={styles.pre}>
-                {(typeof errorMessage === 'string') ? errorMessage : 'Unknown error'}
-              </pre>
-            </span>
-            :
-            'Loading...'}
-        </Typography>
+        <div className={styles.wrapper}>
+          {
+            errorMessage ?
+              <div>
+                <Typography gutterBottom variant='h1'>
+                  Error!
+                </Typography>
+                <Typography gutterBottom variant='h2'>
+                  Details:
+                </Typography>
+                <Typography gutterBottom variant='h3'>
+                  <pre className={styles.pre}>
+                    {(typeof errorMessage === 'string') ? errorMessage : 'Unknown error'}
+                  </pre>
+                </Typography>
+              </div>
+              :
+              <Typography gutterBottom variant='h1'>
+                Loading...
+              </Typography>
+          }
+        </div>
       </Paper>
     );
   }

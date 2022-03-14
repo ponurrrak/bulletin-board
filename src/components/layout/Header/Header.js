@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle, faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons';
 
 import { fetchUser, getUser } from '../../../redux/userRedux.js';
 
@@ -44,13 +44,14 @@ const Component = ({ className, user, fetchUser }) => {
                     <Button className={styles.iconLink} component='a' href='/auth/google'>
                       Sign in with
                       <IconButton className={clsx(styles.icon, styles.iconGoogle)}>
+
                         <FontAwesomeIcon icon={ faGoogle }/>
                       </IconButton>
                     </Button>
                     <Button className={styles.iconLink} component='a' href='/auth/facebook'>
-                      Or with
+                      Or sign in with
                       <IconButton className={clsx(styles.icon, styles.iconFacebook)}>
-                        <FontAwesomeIcon icon={ faFacebook }/>
+                        <FontAwesomeIcon icon={ faFacebookF }/>
                       </IconButton>
                     </Button>
                   </span>}
