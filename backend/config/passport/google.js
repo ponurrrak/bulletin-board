@@ -9,10 +9,3 @@ passport.use(new GoogleStrategy({
   scope: ['email', 'profile'],
 }, startSession(createUserDoc, 'google')));
 
-passport.serializeUser((obj, serialize) => {
-  serialize(null, obj);
-});
-
-passport.deserializeUser((user, deserialize) => {
-  deserialize(null, user);
-});

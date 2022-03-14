@@ -25,6 +25,13 @@ const app = express();
 app.use(session({ secret: process.env.sessionSecret }));
 app.use(passport.initialize());
 app.use(passport.session());
+passport.serializeUser((obj, serialize) => {
+  serialize(null, obj);
+});
+passport.deserializeUser((user, deserialize) => {
+  deserialize(null, user);
+});
+
 if(process.env.NODE_ENV !== 'production') {
   app.options('*', cors(corsOptions));
   app.use(cors(corsOptions));

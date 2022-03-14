@@ -9,10 +9,3 @@ passport.use(new FacebookStrategy({
   profileFields: ['id', 'displayName', 'photos', 'email'],
 }, startSession(createUserDoc, 'facebook')));
 
-passport.serializeUser((obj, serialize) => {
-  serialize(null, obj);
-});
-
-passport.deserializeUser((user, deserialize) => {
-  deserialize(null, user);
-});
