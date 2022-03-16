@@ -4,7 +4,6 @@ const querySanitize = require('mongo-sanitize');
 
 const Post = require('../models/post.model');
 const User = require('../models/user.model');
-//const { savePhoto, completeDocument, parseErrors } = require('../utils/utils');
 const { completeDocument, parseErrors } = require('../utils/utils');
 const noUpdateFields = require('../config/config').noUpdateFields;
 
@@ -64,7 +63,6 @@ router.post('/', async (req, res) => {
       const user = await User.findOne({userId: {$eq: req.user.id}, provider: {$eq: req.user.provider}});
       if(user){
         let newPost = new Post(req.body);
-        //newPost = savePhoto(newPost, req);
         newPost = completeDocument(newPost, user);
         newPost = await newPost.save();
         res.json({_id: newPost._id});
@@ -91,7 +89,6 @@ router.put('/:id', async (req, res) => {
               postToUpdate[field] = req.body[field];
             }
           }
-          //postToUpdate = savePhoto(postToUpdate, req);
           postToUpdate = completeDocument(postToUpdate, user, true);
           const postUpdated = await postToUpdate.save();
           res.json({version: postUpdated.version});

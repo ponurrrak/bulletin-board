@@ -21,8 +21,6 @@ module.exports = {
     'authorId',
     'authBy',
     'releaseTime',
-    //'photoOriginal',
-    //'photoUploaded',
     '__v',
   ],
 };

@@ -10,14 +10,12 @@ require('./config/passport/google');
 require('./config/passport/facebook');
 
 const { corsOptions, helmetOptions, mongoUrl, port } = require('./config/config');
-//const { useFormidable } = require('./utils/utils');
 
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const postsRoutes = require('./routes/posts.routes');
 
 const publicDirPath = path.join(__dirname, '../build');
-//const uploadDirPath = path.join(publicDirPath, 'upload');
 
 const app = express();
 
@@ -40,7 +38,6 @@ if(process.env.NODE_ENV !== 'production') {
 app.use(helmet(helmetOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-//app.use(useFormidable(uploadDirPath));
 
 /* API ENDPOINTS */
 app.use('/api/posts', postsRoutes);

@@ -36,15 +36,6 @@ export const fetchCurrent = postId => {
   };
 };
 
-/*const createRequestBody = getState => {
-  const currentPost = getCurrent(getState());
-  const formData = new FormData();
-  for(const field in currentPost){
-    formData.append(field, currentPost[field]);
-  }
-  return formData;
-};*/
-
 const sendFile = async file => {
   const formData = new FormData();
   formData.append('file', file);
@@ -78,25 +69,6 @@ export const postNew = () => {
   };
 };
 
-/*export const postNew = async () => {
-  return (dispatch, getState) => {
-    const requestBody = createRequestBody(getState);
-    dispatch(fetchStarted());
-    Axios
-      .post(`${settings.api.url}/${settings.api.endpoints.posts}`, requestBody, {
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-      })
-      .then(res => {
-        dispatch(fetchSuccess(res.data));
-      })
-      .catch(err => {
-        dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
-      });
-  };
-};*/
-
 export const putChanged = postId => {
   return async (dispatch, getState) => {
     dispatch(fetchStarted());
@@ -117,25 +89,6 @@ export const putChanged = postId => {
     }
   };
 };
-
-/*export const putChanged = postId => {
-  return (dispatch, getState) => {
-    const requestBody = createRequestBody(getState);
-    dispatch(fetchStarted());
-    Axios
-      .put(`${settings.api.url}/${settings.api.endpoints.posts}/${postId}`, requestBody, {
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-      })
-      .then(res => {
-        dispatch(fetchSuccess(res.data));
-      })
-      .catch(err => {
-        dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
-      });
-  };
-};*/
 
 /* reducer */
 export const reducer = (statePart = {}, action = {}) => {
