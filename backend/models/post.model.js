@@ -11,7 +11,7 @@ class Price extends mongoose.SchemaType {
     if(!(typeof val === 'number' && val >= 0) && !(typeof val === 'string' && valAsNum >= 0)){
       throw new Error('Price ' + val + ' is neither a positive number nor empty string');
     }
-    if(((valAsNum * 100) % 1) !== 0){
+    if(String(val).replace(/^.*\./, '').length > 2){
       throw new Error('Price ' + val + ' has more than 2 decimal points');
     }
     return val === '' ? '' : valAsNum;
