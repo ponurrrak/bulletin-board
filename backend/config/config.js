@@ -6,6 +6,7 @@ module.exports = {
     contentSecurityPolicy: {
       directives: {
         'img-src': ['*'],
+        'connect-src': ['\'self\'', '*.cloudinary.com:*'],
       },
     },
     crossOriginEmbedderPolicy: false,
@@ -20,8 +21,8 @@ module.exports = {
     'authorId',
     'authBy',
     'releaseTime',
-    'photoOriginal',
-    'photoUploaded',
+    //'photoOriginal',
+    //'photoUploaded',
     '__v',
   ],
 };

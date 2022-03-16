@@ -22,6 +22,7 @@ import styles from './Post.module.scss';
 
 import { Loading } from '../../features/Loading/Loading.js';
 import { createTextMarkup } from '../../common/createMarkup.js';
+import settings from '../../../settings';
 
 const Component = ({className, currentPost, loadingStatus, loadPost, user, match: {params: {id}}}) => {
 
@@ -160,7 +161,7 @@ const Component = ({className, currentPost, loadingStatus, loadPost, user, match
               {currentPost.photoUploaded ?
                 <div className={styles.imageWrapper}>
                   <img
-                    src={'/upload/' + DOMPurify.sanitize(currentPost.photoUploaded)}
+                    src={settings.cloudinery.publicPhotoUrl + '/' + DOMPurify.sanitize(currentPost.photoUploaded)}
                     alt=""
                     className={styles.image}
                   />

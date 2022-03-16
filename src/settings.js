@@ -26,6 +26,11 @@ const settings = {
       },
     },
   },
+  cloudinery: {
+    upload_preset: 'atblqrpt',
+    url: 'https://api.cloudinary.com/v1_1/ponurrrak/image/upload',
+    publicPhotoUrl: 'https://res.cloudinary.com/ponurrrak/image/upload',
+  },
 };
 
 

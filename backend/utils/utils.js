@@ -1,7 +1,7 @@
-const mime = require('mime');
-const formidable = require('formidable');
+//const mime = require('mime');
+//const formidable = require('formidable');
 
-exports.savePhoto = (doc, req) => {
+/*exports.savePhoto = (doc, req) => {
   const photo = req.file.photoOriginal;
   if(photo){
     const mimeType = mime.getType(photo.filepath).split('/')[0];
@@ -15,7 +15,7 @@ exports.savePhoto = (doc, req) => {
     doc.photoUploaded = '';
   }
   return doc;
-};
+};*/
 
 exports.completeDocument = (doc, user, isPutMethod=false) => {
   const timeNow = Date.now();
@@ -43,7 +43,7 @@ exports.parseErrors = err => {
   return message;
 };
 
-exports.useFormidable = uploadDirPath => (
+/*exports.useFormidable = uploadDirPath => (
   (req, res, next) => {
     const contentType = req.headers['content-type'] || '';
     if(['POST', 'PUT'].includes(req.method) && contentType.startsWith('multipart/form-data')){
@@ -61,4 +61,4 @@ exports.useFormidable = uploadDirPath => (
       next();
     }
   }
-);
+);*/

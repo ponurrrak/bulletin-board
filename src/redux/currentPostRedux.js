@@ -36,16 +36,49 @@ export const fetchCurrent = postId => {
   };
 };
 
-const createRequestBody = getState => {
+/*const createRequestBody = getState => {
   const currentPost = getCurrent(getState());
   const formData = new FormData();
   for(const field in currentPost){
     formData.append(field, currentPost[field]);
   }
   return formData;
+};*/
+
+const sendFile = async file => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', settings.cloudinery.upload_preset);
+  const response = await Axios.post(settings.cloudinery.url, formData,  {
+    headers: {
+      'content-type': 'multipart/form-data',
+    },
+  });
+  return response.data.secure_url.replace(settings.cloudinery.publicPhotoUrl, '');
 };
 
 export const postNew = () => {
+  return async (dispatch, getState) => {
+    dispatch(fetchStarted());
+    try {
+      const requestBody = getCurrent(getState());
+      let photoOriginal = '';
+      let photoUploaded = '';
+      if(requestBody.photoOriginal) {
+        photoOriginal = requestBody.photoOriginal.name;
+        photoUploaded = await sendFile(requestBody.photoOriginal);
+      }
+      requestBody.photoOriginal = photoOriginal;
+      requestBody.photoUploaded = photoUploaded;
+      const response = await Axios.post(`${settings.api.url}/${settings.api.endpoints.posts}`, requestBody);
+      dispatch(fetchSuccess(response.data));
+    } catch(err) {
+      dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
+    }
+  };
+};
+
+/*export const postNew = async () => {
   return (dispatch, getState) => {
     const requestBody = createRequestBody(getState);
     dispatch(fetchStarted());
@@ -62,9 +95,30 @@ export const postNew = () => {
         dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
       });
   };
-};
+};*/
 
 export const putChanged = postId => {
+  return async (dispatch, getState) => {
+    dispatch(fetchStarted());
+    try {
+      const requestBody = getCurrent(getState());
+      if(!requestBody.photoOriginal){
+        requestBody.photoUploaded = '';
+      } else if(requestBody.photoOriginal.name) {
+        const photoOriginal = requestBody.photoOriginal.name;
+        const photoUploaded = await sendFile(requestBody.photoOriginal);
+        requestBody.photoOriginal = photoOriginal;
+        requestBody.photoUploaded = photoUploaded;
+      }
+      const response = await Axios.put(`${settings.api.url}/${settings.api.endpoints.posts}/${postId}`, requestBody);
+      dispatch(fetchSuccess(response.data));
+    } catch(err) {
+      dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
+    }
+  };
+};
+
+/*export const putChanged = postId => {
   return (dispatch, getState) => {
     const requestBody = createRequestBody(getState);
     dispatch(fetchStarted());
@@ -81,7 +135,7 @@ export const putChanged = postId => {
         dispatch(fetchError((err.response && err.response.data && err.response.data.message) || err.message || true));
       });
   };
-};
+};*/
 
 /* reducer */
 export const reducer = (statePart = {}, action = {}) => {
